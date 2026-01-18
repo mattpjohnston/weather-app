@@ -1,78 +1,114 @@
 import "./style.css";
 import getWeather from "./fetch.js";
-import { render, toggleForecast } from "./dom.js";
-
-import { createIcons } from "lucide";
-
 import {
-  Cloud,
-  Sun,
-  CloudRain,
-  CloudSnow,
-  CloudLightning,
-  CloudFog,
-  CloudMoon,
-  CloudSun,
-  Moon,
-  Wind,
-  Droplets,
-  Eye,
-  Gauge,
-  Sunrise,
-  Sunset,
-  MapPin,
-} from "lucide";
+  render,
+  toggleForecast,
+  initIcons,
+  showLoading,
+  hideLoading,
+  showError,
+  toggleUnits,
+} from "./dom.js";
 
-createIcons({
-  icons: {
-    Cloud,
-    Sun,
-    CloudRain,
-    CloudSnow,
-    CloudLightning,
-    CloudFog,
-    CloudMoon,
-    CloudSun,
-    Moon,
-    Wind,
-    Droplets,
-    Eye,
-    Gauge,
-    Sunrise,
-    Sunset,
-    MapPin,
-  },
-});
+let currentUnit = "metric";
 
-// TODO
-function loadPage() {}
+function init() {
+  initIcons();
+  setupEventListeners();
+}
 
-const searchBtn = document.querySelector("#search-btn");
-searchBtn.addEventListener("click", async () => {
-  const searchValue = document.querySelector("#city-search").value;
-  if (searchValue && typeof searchValue === "string") {
-    try {
-      render(await getWeather(searchValue));
-    } catch {
-      console.log("failed");
+function setupEventListeners() {
+  const locationBtn = document.querySelector("#location-btn");
+  const fahrenheitBtn = document.querySelector("#fahrenheit-btn");
+  const celsiusBtn = document.querySelector("#celsius-btn");
+  const forecastTabs = document.querySelector("#forecast-tabs");
+  const searchBar = document.querySelector("#city-search");
+  const searchBtn = document.querySelector("#search-btn");
+
+  if (locationBtn) locationBtn.onclick = handleLocationClick;
+
+  if (fahrenheitBtn && celsiusBtn) {
+    fahrenheitBtn.onclick = () => {
+      currentUnit = toggleUnits("imperial", currentUnit);
+    };
+    celsiusBtn.onclick = () => {
+      currentUnit = toggleUnits("metric", currentUnit);
+    };
+  }
+
+  if (forecastTabs) {
+    for (const child of forecastTabs.children) {
+      child.onclick = toggleForecast;
     }
   }
-});
 
-const searchBar = document.querySelector("#city-search");
-searchBar.addEventListener("keypress", async (e) => {
-  if (e.key === "Enter") {
-    const searchValue = searchBar.value;
-    if (searchValue && typeof searchValue === "string") {
+  if (searchBar) {
+    searchBar.onkeypress = async (e) => {
+      if (e.key === "Enter") await handleSearch();
+    };
+  }
+
+  if (searchBtn) searchBtn.onclick = handleSearch;
+}
+
+async function handleSearch() {
+  const searchBar = document.querySelector("#city-search");
+  const searchValue = searchBar.value.trim();
+
+  if (!searchValue) return;
+
+  showLoading();
+  try {
+    const data = await getWeather(searchValue);
+    render(data);
+    setupEventListeners();
+  } catch {
+    showError(`Couldn't find "${searchValue}"`);
+  } finally {
+    hideLoading();
+  }
+}
+
+async function handleLocationClick() {
+  if (!navigator.geolocation) {
+    showError("Geolocation not supported");
+    return;
+  }
+
+  const locationBtn = document.querySelector("#location-btn");
+  locationBtn.innerHTML = '<span class="text-white">Getting location...</span>';
+  locationBtn.disabled = true;
+
+  const resetButton = () => {
+    locationBtn.innerHTML = '<i data-lucide="map-pin" class="text-white"></i>';
+    locationBtn.disabled = false;
+    initIcons();
+  };
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
       try {
-        render(await getWeather(searchValue));
+        showLoading();
+        const { latitude, longitude } = position.coords;
+        const data = await getWeather(`${latitude},${longitude}`);
+        render(data);
+        setupEventListeners();
       } catch {
-        console.log("failed");
+        showError("Failed to get weather");
+      } finally {
+        hideLoading();
+        resetButton();
       }
-    }
-  }
-});
+    },
+    (err) => {
+      const message =
+        err.code === err.PERMISSION_DENIED
+          ? "Location access denied"
+          : "Couldn't get location";
+      showError(message);
+      resetButton();
+    },
+  );
+}
 
-// TODO Set up search box and first load html
-
-// TODO Set up current location button
+init();
