@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" class="no-scrollbar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <script type="module" crossorigin src="/assets/index-Ct6ZXK_Y.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BZxsVBXL.css">
+  </head>
+  <body
+    id="app-body"
+    class="min-h-screen bg-linear-to-b from-blue-400 via-blue-500 to-blue-600 p-4 md:p-8 font-sans"
+  >
+    <div id="main-container" class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <div class="flex justify-center mb-6">
+          <div class="relative">
+            <i
+              data-lucide="cloud"
+              class="text-white/90"
+              style="width: 80px; height: 80px; stroke-width: 1.5px"
+            ></i>
+            <i
+              data-lucide="sun"
+              class="text-yellow-300 absolute -top-2 -right-2"
+              style="width: 40px; height: 40px; stroke-width: 1.5px"
+            ></i>
+          </div>
+        </div>
+
+        <h1 class="text-5xl md:text-6xl font-light text-white mb-4">
+          Weather App
+        </h1>
+        <p class="text-xl text-white/80 font-light">
+          Get accurate weather forecasts for any location
+        </p>
+      </div>
+
+      <div
+        class="bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 p-8 shadow-2xl mb-8"
+      >
+        <div class="relative mb-6">
+          <i
+            data-lucide="search"
+            class="absolute left-5 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none"
+            style="width: 24px; height: 24px"
+          ></i>
+          <input
+            type="text"
+            id="city-search"
+            placeholder="Enter a location..."
+            class="w-full pl-16 pr-5 py-5 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white text-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/25 transition-all"
+          />
+        </div>
+
+        <button
+          id="search-btn"
+          class="w-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white font-medium py-4 px-6 rounded-2xl transition-all duration-200 hover:scale-101 active:scale-99"
+        >
+          Search Weather
+        </button>
+
+        <div class="relative my-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-white/20"></div>
+          </div>
+          <div class="relative flex justify-center text-sm"></div>
+        </div>
+
+        <button
+          id="location-btn"
+          class="w-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-medium py-4 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center gap-3 group hover:scale-101 active:scale-99"
+        >
+          <i
+            data-lucide="map-pin"
+            class="group-hover:scale-110 transition-transform"
+            style="width: 20px; height: 20px"
+          ></i>
+          Use Current Location
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div
+          class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-4 text-center"
+        >
+          <i
+            data-lucide="wind"
+            class="text-white/80 mx-auto mb-2"
+            style="width: 28px; height: 28px"
+          ></i>
+          <div class="text-white/70 text-sm">Wind Speed</div>
+        </div>
+        <div
+          class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-4 text-center"
+        >
+          <i
+            data-lucide="droplets"
+            class="text-white/80 mx-auto mb-2"
+            style="width: 28px; height: 28px"
+          ></i>
+          <div class="text-white/70 text-sm">Humidity</div>
+        </div>
+        <div
+          class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-4 text-center"
+        >
+          <i
+            data-lucide="sunrise"
+            class="text-white/80 mx-auto mb-2"
+            style="width: 28px; height: 28px"
+          ></i>
+          <div class="text-white/70 text-sm">Sunrise</div>
+        </div>
+        <div
+          class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-4 text-center"
+        >
+          <i
+            data-lucide="cloud"
+            class="text-white/80 mx-auto mb-2"
+            style="width: 28px; height: 28px"
+          ></i>
+          <div class="text-white/70 text-sm">Forecast</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center text-white/50 text-sm">
+      Weather data powered by Visual Crossing API
+    </div>
+  </body>
+</html>
